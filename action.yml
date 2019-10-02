@@ -1,0 +1,19 @@
+name: 'Carthage update checker'
+description: 'Carthage new package version checker'
+author: 'MeilCli'
+branding:
+  icon: arrow-up
+  color: blue
+inputs:
+  execute_directories:
+    description: 'execute directories of carthage outdated command'
+outputs:
+  has_carthage_update:
+    description: 'has new package version information'
+  carthage_update_text:
+    description: 'new package version information text'
+  carthage_update_json:
+    description: 'new package version information json'
+runs:
+  using: 'node12'
+  main: 'lib/main.js'
