@@ -5,7 +5,7 @@ export interface OutdatedPackage {
 }
 
 export function toOutdatedPackages(value: string): OutdatedPackage[] {
-    const lines = value.split("\n").map(x => x.trim());
+    const lines = value.split("\n").map((x) => x.trim());
     const result: OutdatedPackage[] = [];
 
     for (const line of lines) {
@@ -13,9 +13,7 @@ export function toOutdatedPackages(value: string): OutdatedPackage[] {
             continue;
         }
 
-        const match = line.match(
-            /(.+?)\s"(.+?)"\s->\s"(.+?)"\s\(Latest:\s"(.+?)"\)/
-        );
+        const match = line.match(/(.+?)\s"(.+?)"\s->\s"(.+?)"\s\(Latest:\s"(.+?)"\)/);
         if (match == null) {
             continue;
         }
@@ -30,7 +28,7 @@ export function toOutdatedPackages(value: string): OutdatedPackage[] {
         result.push({
             name: name,
             current: current,
-            latest: latest
+            latest: latest,
         });
     }
 
