@@ -77,7 +77,9 @@ async function run() {
         core.setOutput("carthage_update_text", outputText);
         core.setOutput("carthage_update_json", JSON.stringify(result));
     } catch (error) {
-        core.setFailed(error.message);
+        if (error instanceof Error) {
+            core.setFailed(error.message);
+        }
     }
 }
 
