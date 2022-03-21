@@ -66,55 +66,40 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(186));
 const exec = __importStar(__nccwpck_require__(514));
 const io = __importStar(__nccwpck_require__(436));
 const os = __importStar(__nccwpck_require__(37));
 const json_1 = __nccwpck_require__(182);
-function getOption() {
-    return __awaiter(this, void 0, void 0, function* () {
-        let executeDirectories = core
-            .getInput("execute_directories")
-            .split(os.EOL)
-            .map((x) => x.trim());
-        if (executeDirectories.length == 1 && executeDirectories[0].length == 0) {
-            executeDirectories = null;
-        }
-        return {
-            executeDirectories: executeDirectories,
-        };
-    });
+async function getOption() {
+    let executeDirectories = core
+        .getInput("execute_directories")
+        .split(os.EOL)
+        .map((x) => x.trim());
+    if (executeDirectories.length == 1 && executeDirectories[0].length == 0) {
+        executeDirectories = null;
+    }
+    return {
+        executeDirectories: executeDirectories,
+    };
 }
-function checkEnvironment() {
-    return __awaiter(this, void 0, void 0, function* () {
-        yield io.which("carthage", true);
-    });
+async function checkEnvironment() {
+    await io.which("carthage", true);
 }
-function executeOutdated(executeDirectory) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const execOption = {};
-        if (executeDirectory != null) {
-            execOption.cwd = executeDirectory;
-        }
-        let stdout = "";
-        execOption.listeners = {
-            stdout: (data) => {
-                stdout += data.toString();
-            },
-        };
-        yield exec.exec("carthage outdated", undefined, execOption);
-        return (0, json_1.toOutdatedPackages)(stdout);
-    });
+async function executeOutdated(executeDirectory) {
+    const execOption = {};
+    if (executeDirectory != null) {
+        execOption.cwd = executeDirectory;
+    }
+    let stdout = "";
+    execOption.listeners = {
+        stdout: (data) => {
+            stdout += data.toString();
+        },
+    };
+    await exec.exec("carthage outdated", undefined, execOption);
+    return (0, json_1.toOutdatedPackages)(stdout);
 }
 function convertToOutputText(outdatedPackages) {
     let result = "";
@@ -126,33 +111,31 @@ function convertToOutputText(outdatedPackages) {
     }
     return result;
 }
-function run() {
-    return __awaiter(this, void 0, void 0, function* () {
-        try {
-            yield checkEnvironment();
-            const option = yield getOption();
-            const result = [];
-            if (option.executeDirectories == null) {
-                const packages = yield executeOutdated(null);
+async function run() {
+    try {
+        await checkEnvironment();
+        const option = await getOption();
+        const result = [];
+        if (option.executeDirectories == null) {
+            const packages = await executeOutdated(null);
+            packages.forEach((x) => result.push(x));
+        }
+        else {
+            for (const executeDirectory of option.executeDirectories) {
+                const packages = await executeOutdated(executeDirectory);
                 packages.forEach((x) => result.push(x));
             }
-            else {
-                for (const executeDirectory of option.executeDirectories) {
-                    const packages = yield executeOutdated(executeDirectory);
-                    packages.forEach((x) => result.push(x));
-                }
-            }
-            const outputText = convertToOutputText(result);
-            core.setOutput("has_carthage_update", result.length == 0 ? "false" : "true");
-            core.setOutput("carthage_update_text", outputText);
-            core.setOutput("carthage_update_json", JSON.stringify(result));
         }
-        catch (error) {
-            if (error instanceof Error) {
-                core.setFailed(error.message);
-            }
+        const outputText = convertToOutputText(result);
+        core.setOutput("has_carthage_update", result.length == 0 ? "false" : "true");
+        core.setOutput("carthage_update_text", outputText);
+        core.setOutput("carthage_update_json", JSON.stringify(result));
+    }
+    catch (error) {
+        if (error instanceof Error) {
+            core.setFailed(error.message);
         }
-    });
+    }
 }
 run();
 
