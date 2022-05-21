@@ -1,5 +1,5 @@
 # carthage-update-check-action
-![](https://github.com/MeilCli/carthage-update-check-action/workflows/CI/badge.svg)  
+[![CI-Master](https://github.com/MeilCli/carthage-update-check-action/actions/workflows/ci-master.yml/badge.svg)](https://github.com/MeilCli/carthage-update-check-action/actions/workflows/ci-master.yml)  
 Carthage new package version check action for GitHub Actions.
 
 ## Required
