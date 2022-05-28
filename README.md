@@ -48,8 +48,11 @@ You can also pin to a [specific release](https://github.com/MeilCli/carthage-upd
 - `carthage_update_json`
   - new package version information json
 
-## Contributing
+## Contributes
+[<img src="https://gist.github.com/MeilCli/e93dff5045ec3114e4073597fa844b07/raw/79be247c9959df1d046baec619233911a0ca1b97/metrics_contributors.svg">](https://github.com/MeilCli/carthage-update-check-action/graphs/contributors)
+
+### Could you want to contribute?
 see [Contributing.md](./.github/CONTRIBUTING.md)
 
 ## License
-[MIT License](LICENSE).
+[<img src="https://gist.github.com/MeilCli/e93dff5045ec3114e4073597fa844b07/raw/79be247c9959df1d046baec619233911a0ca1b97/metrics_licenses.svg">](LICENSE)
